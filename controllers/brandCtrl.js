@@ -49,7 +49,7 @@ const brandCtrl = {
             const features = new APIfeatures(Brands.find(), req.query)
                 .filtering()
                 .sorting()
-                .pagination()
+                // .pagination()
 
             const brands = await features.query;
 
@@ -79,13 +79,13 @@ const brandCtrl = {
 
     createBrand: async(req, res) => {
         try {
-            const { name, images } = req.body;
+            const { name, images, category } = req.body;
             // if (!images) return res.status(400).json({msg: "No image upload"})
 
             const brand = await Brands.findOne({name});
             if (brand) return res.status(400).json({msg: "This product already exists."})
 
-            const newBrand = new Brands({name: name.toLowerCase(), images});
+            const newBrand = new Brands({name: name.toLowerCase(), images, category});
 
             await newBrand.save();
             res.json({msg: "Created a product"})
@@ -106,17 +106,32 @@ const brandCtrl = {
 
     updateBrand: async(req, res) => {
         try {
-            const {name, images} = req.body;
+            const {name, images, category} = req.body;
             if(!images) return res.status(400).json({msg: "No image upload"})
 
             await Brands.findOneAndUpdate({_id: req.params.id}, {
-                name: name.toLowerCase(), images
+                name: name.toLowerCase(), images, category
             })
 
             res.json({msg: "Updated a Product"})
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
+    },
+
+    getBrandBySlug: async(req, res) => {
+        const slug = req.params.slug
+        try {
+            const brand = await Brands.findOne({slug: slug});
+
+            res.json({
+                status: 'success',
+                data: brand
+            })
+        } catch (error) {
+            return res.status(500).json({msg: err.message})
+        }
+
     }
 }
 

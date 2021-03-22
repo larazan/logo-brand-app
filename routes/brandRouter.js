@@ -13,6 +13,6 @@ router.route('/brands/:id')
     .put(brandCtrl.updateBrand)
 
 
-
+router.route('/brandsSlug/:slug').get(brandCtrl.getBrandBySlug)
 
 module.exports = router

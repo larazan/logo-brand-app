@@ -18,6 +18,7 @@ app.use(fileUpload({
 // Routes
 app.use('/api', require('./routes/upload'))
 app.use('/api', require('./routes/brandRouter'))
+app.use('/api', require('./routes/categoryRouter'))
 
 
 
